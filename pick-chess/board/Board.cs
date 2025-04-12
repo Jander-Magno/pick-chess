@@ -18,10 +18,42 @@
             return pieces[line, column];
         }
 
+        public Piece piece(Position pos)
+        {
+            return pieces[pos.line, pos.column];
+        }
+
+        public bool existPiece(Position pos)
+        {
+            validatePosition(pos);
+            return piece(pos) != null;
+        }
+
         public void putPiece(Piece p, Position pos)
         {
+            if (existPiece(pos))
+            {
+                throw new BoardException("A piece already exits in this position!");
+            }
             pieces[pos.line, pos.column] = p;
             p.position = pos;
+        }
+
+        public bool positionValid(Position pos)
+        {
+            if (pos.line < 0 || pos.line  >= lines || pos.column < 0 || pos.column >= columns)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public void validatePosition(Position pos)
+        {
+            if (!positionValid(pos))
+            {
+                throw new BoardException("Position invalid!");
+            }
         }
 
 

@@ -8,15 +8,22 @@ namespace pick_chess
     {
         static void Main(string[] args)
         {
-            Board bor = new Board(8, 8);
+            try
+            {
+                Board bor = new Board(8, 8);
 
-            bor.putPiece(new Rook(bor, Color.Black), new Position(0, 0));
-            bor.putPiece(new Rook(bor, Color.Black), new Position(1, 3));
-            bor.putPiece(new King(bor, Color.Black), new Position(2, 0));
+                bor.putPiece(new Rook(bor, Color.Black), new Position(0, 0));
+                bor.putPiece(new Rook(bor, Color.Black), new Position(1, 3));
+                bor.putPiece(new King(bor, Color.Black), new Position(0, 2));
 
-            Screen.printBoard(bor);
+                Screen.printBoard(bor);
 
-            Console.ReadLine();
+                Console.ReadLine();
+            }
+            catch (BoardException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }
