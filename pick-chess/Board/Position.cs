@@ -1,4 +1,4 @@
-﻿namespace pick_chess.Board
+﻿namespace pick_chess.board
 {
     internal class Position
     {

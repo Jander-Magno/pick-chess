@@ -1,4 +1,4 @@
-﻿using pick_chess.Board;
+﻿using pick_chess.board;
 
 namespace pick_chess
 {
@@ -6,11 +6,7 @@ namespace pick_chess
     {
         static void Main(string[] args)
         {
-            Position P;
-
-            P = new Position(3, 4);
-
-            Console.WriteLine("Position: " + P);
+            Board bor = new Board(8, 8);
 
             Console.ReadLine();
         }
