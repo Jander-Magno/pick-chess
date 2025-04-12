@@ -8,6 +8,8 @@ namespace pick_chess
         {
             Board bor = new Board(8, 8);
 
+            Screen.printBoard(bor);
+
             Console.ReadLine();
         }
     }
