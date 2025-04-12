@@ -1,6 +1,6 @@
 ﻿namespace pick_chess.board
 {
-    internal class Piece
+    abstract class Piece
     {
         public Position position { get; set; }
         public Color color { get; protected set; }
@@ -14,11 +14,10 @@
             this.color = color;
             this.qtyMoves = 0;
         }
-
         public void incrementQtyMoves()
         {
             qtyMoves++;
         }
-
+        public abstract bool[,] possibleMoves();
     }
 }

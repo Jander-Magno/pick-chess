@@ -21,6 +21,13 @@ namespace pick_chess
                     Console.WriteLine();
                     Console.Write("Origin: ");
                     Position origin = Screen.readPositionChess().toPosition();
+
+                    bool[,] possibleMoves = match.bor.piece(origin).possibleMoves();
+
+                    Console.Clear();
+                    Screen.printBoard(match.bor);
+
+                    Console.WriteLine();
                     Console.Write("Destiny: ");
                     Position destiny = Screen.readPositionChess().toPosition();
                     
