@@ -1,4 +1,6 @@
-﻿namespace pick_chess.board
+﻿using pick_chess.Chess;
+
+namespace pick_chess.board
 {
     internal class Screen
     {
@@ -22,6 +24,14 @@
                 Console.WriteLine();
             }
             Console.WriteLine("  a b c d e f g h");
+        }
+
+        public static PositionChess readPositionChess()
+        {
+            string s = Console.ReadLine();
+            char column = s[0];
+            int line = int.Parse(s[1] + "");
+            return new PositionChess(column, line);
         }
 
         public static void printPiece(Piece piece)

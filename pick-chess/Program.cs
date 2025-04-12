@@ -11,15 +11,23 @@ namespace pick_chess
 
             try
             {
-                Board bor = new Board(8, 8);
+                Match match = new Match();
 
-                bor.putPiece(new Rook(bor, Color.Black), new Position(0, 0));
-                bor.putPiece(new Rook(bor, Color.Black), new Position(1, 3));
-                bor.putPiece(new King(bor, Color.Black), new Position(0, 2));
+                while (!match.finished)
+                {
+                    Console.Clear();
+                    Screen.printBoard(match.bor);
 
-                bor.putPiece(new Rook(bor, Color.White), new Position(3, 5));
+                    Console.WriteLine();
+                    Console.Write("Origin: ");
+                    Position origin = Screen.readPositionChess().toPosition();
+                    Console.Write("Destiny: ");
+                    Position destiny = Screen.readPositionChess().toPosition();
+                    
+                    match.executeMove(origin, destiny);
+                }
 
-                Screen.printBoard(bor);
+                Screen.printBoard(match.bor);
             }
             catch (BoardException e)
             {
