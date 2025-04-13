@@ -22,7 +22,6 @@ namespace pick_chess.board
 
         public static void printBoard(Board bor, bool[,] possibleMoves)
         {
-
             ConsoleColor originalBackGround = Console.BackgroundColor;
             ConsoleColor alteredBackground = ConsoleColor.DarkGray;
 
@@ -60,14 +59,14 @@ namespace pick_chess.board
         {
             if (piece == null)
             {
-                Console.WriteLine("- ");
+                Console.Write("- ");
             }
             else
             {
                 if (piece.color == Color.White)
                 {
                     Console.Write(piece);
-                }
+                }  
                 else
                 {
                     ConsoleColor aux = Console.ForegroundColor;
@@ -75,7 +74,7 @@ namespace pick_chess.board
                     Console.Write(piece);
                     Console.ForegroundColor = aux;
                 }
-                Console.WriteLine(" ");
+                Console.Write(" ");
             }
         }
 

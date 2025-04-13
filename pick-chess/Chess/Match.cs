@@ -1,13 +1,14 @@
 ﻿using System;
 using pick_chess.board;
+using pick_chess.Chess;
 
 namespace pick_chess.Chess
 {
     internal class Match
     {
         public Board bor { get; private set; }
-        private int turn;
-        private Color actualPlayer;
+        public int turn { get; private set; }
+        public Color actualPlayer { get; private set; }
         public bool finished { get; private set; }
 
         public Match()
@@ -25,6 +26,49 @@ namespace pick_chess.Chess
             p.incrementQtyMoves();
             Piece capturedPiece = bor.removePiece(destiny);
             bor.putPiece(p, destiny);
+        }
+
+        public void realizePlay(Position origin, Position destiny)
+        {
+            executeMove(origin, destiny);
+            turn++;
+            changePlayer();
+        }
+
+        public void validateOriginPosition(Position pos) 
+        { 
+           if (bor.piece(pos) == null)
+            {
+                throw new BoardException("Does not exist any piece in this position");
+            }
+           if (actualPlayer != bor.piece(pos).color)
+            {
+                throw new BoardException("The selected piece isn´t yours!"); 
+            }
+           if (!bor.piece(pos).havePossibleMoves())
+            {
+                throw new BoardException("Does not exist possible moves for this origin piece! ");
+            }
+        }
+
+        public void validateDestinyPosition(Position origin, Position destiny)
+        {
+            if (!bor.piece(origin).canMoveTo(destiny))
+            {
+                throw new BoardException("invalid destiny position!");
+            }
+        }
+
+        private void changePlayer()
+        {
+            if (actualPlayer == Color.White)
+            {
+                actualPlayer = Color.Black;
+            }
+            else
+            {
+                actualPlayer = Color.White;
+            }
         }
 
         private void putPiece()

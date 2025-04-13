@@ -18,6 +18,28 @@
         {
             qtyMoves++;
         }
+
+        public bool havePossibleMoves()
+        {
+            bool[,] arr = possibleMoves();
+            for (int i = 0; i < bor.lines; i++)
+            {
+                for (int j = 0; j < bor.columns; j++)
+                {
+                    if (arr[i, j])
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool canMoveTo(Position pos)
+        {
+            return possibleMoves()[pos.line, pos.column];
+        }
+
         public abstract bool[,] possibleMoves();
     }
 }
