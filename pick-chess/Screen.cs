@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using pick_chess.Chess;
 using pick_chess.board;
 
@@ -6,6 +6,41 @@ namespace pick_chess.board
 {
     internal class Screen
     {
+
+        public static void printMatch(Match match)
+        {
+            Screen.printBoard(match.bor);
+            Console.WriteLine();
+            printCapturedPieces(match);
+            Console.WriteLine();
+            Console.WriteLine("Turno: " + match.turn);
+            Console.WriteLine("Waiting play: " + match.actualPlayer);
+        }
+
+        public static void printCapturedPieces(Match match)
+        {
+            Console.WriteLine("Captured pieces:");
+            Console.Write("White: ");
+            printSet(match.capturedPieces(Color.White));
+            Console.WriteLine();
+            Console.Write("Black: ");
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            printSet(match.capturedPieces(Color.Black));
+            Console.ForegroundColor = aux;
+            Console.WriteLine();
+        } 
+
+        public static void printSet(HashSet<Piece> set)
+        {
+            Console.Write("[");
+            foreach (Piece x in set)
+            {
+                Console.WriteLine(x + " ");
+            }
+            Console.Write("]");
+        }
+
         public static void printBoard(Board bor)
         {
             for (int i = 0; i<bor.lines; i++)

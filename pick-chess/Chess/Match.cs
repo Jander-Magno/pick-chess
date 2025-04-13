@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using pick_chess.board;
 using pick_chess.Chess;
 
@@ -10,6 +10,8 @@ namespace pick_chess.Chess
         public int turn { get; private set; }
         public Color actualPlayer { get; private set; }
         public bool finished { get; private set; }
+        private HashSet<Piece> pieces;
+        private HashSet<Piece> captures;
 
         public Match()
         {
@@ -17,7 +19,9 @@ namespace pick_chess.Chess
             turn = 1;
             actualPlayer = Color.White;
             finished = false;
-            putPiece();
+            pieces = new HashSet<Piece>();
+            captures = new HashSet<Piece>();
+            putPieces();
         }
 
         public void executeMove(Position origin, Position destiny)
@@ -26,6 +30,10 @@ namespace pick_chess.Chess
             p.incrementQtyMoves();
             Piece capturedPiece = bor.removePiece(destiny);
             bor.putPiece(p, destiny);
+            if (capturedPiece != null)
+            {
+                captures.Add(capturedPiece);
+            }
         }
 
         public void realizePlay(Position origin, Position destiny)
@@ -55,7 +63,7 @@ namespace pick_chess.Chess
         {
             if (!bor.piece(origin).canMoveTo(destiny))
             {
-                throw new BoardException("invalid destiny position!");
+                throw new BoardException("Invalid destiny position!");
             }
         }
 
@@ -71,24 +79,55 @@ namespace pick_chess.Chess
             }
         }
 
-        private void putPiece()
+        public HashSet<Piece> capturedPieces(Color color) 
         {
-            bor.putPiece(new Rook(bor, Color.White), new PositionChess('c', 1).toPosition());
-            bor.putPiece(new Rook(bor, Color.White), new PositionChess('c', 2).toPosition());
-            bor.putPiece(new Rook(bor, Color.White), new PositionChess('d', 2).toPosition());
-            bor.putPiece(new Rook(bor, Color.White), new PositionChess('e', 2).toPosition());
-            bor.putPiece(new Rook(bor, Color.White), new PositionChess('e', 1).toPosition());
-            bor.putPiece(new King(bor, Color.White), new PositionChess('d', 1).toPosition());
-
-            bor.putPiece(new Rook(bor, Color.Black), new PositionChess('c', 7).toPosition());
-            bor.putPiece(new Rook(bor, Color.Black), new PositionChess('c', 8).toPosition());
-            bor.putPiece(new Rook(bor, Color.Black), new PositionChess('d', 7).toPosition());
-            bor.putPiece(new Rook(bor, Color.Black), new PositionChess('e', 7).toPosition());
-            bor.putPiece(new Rook(bor, Color.Black), new PositionChess('e', 8).toPosition());
-            bor.putPiece(new King(bor, Color.Black), new PositionChess('d', 8).toPosition());
-
-
-
+            HashSet<Piece> aux = new HashSet<Piece>();
+            foreach (Piece x in captures)
+            {
+                if (x.color == color)
+                {
+                    aux.Add(x);
+                }
+            }
+            return aux;
         }
+
+        public HashSet<Piece> inGamePieces(Color color)
+        {
+            HashSet<Piece> aux = new HashSet<Piece>();
+            foreach (Piece x in pieces)
+            {
+                if (x.color == color)
+                {
+                    aux.Add(x);
+                }
+            }
+            aux.ExceptWith(capturedPieces(color));
+            return aux;
+        }
+
+        public void putNewPiece(char column, int line, Piece piece)
+        {
+            bor.putPiece(piece, new PositionChess(column, line).toPosition());
+            pieces.Add(piece);
+        }
+
+        private void putPieces()
+        {
+            putNewPiece('c', 1, new Rook(bor, Color.White));
+            putNewPiece('c', 2, new Rook(bor, Color.White));
+            putNewPiece('d', 2, new Rook(bor, Color.White));
+            putNewPiece('e', 2, new Rook(bor, Color.White));
+            putNewPiece('e', 1, new Rook(bor, Color.White));
+            putNewPiece('d', 1, new King(bor, Color.White));
+
+            putNewPiece('c', 7, new Rook(bor, Color.White));
+            putNewPiece('c', 8, new Rook(bor, Color.White));
+            putNewPiece('d', 7, new Rook(bor, Color.White));
+            putNewPiece('e', 7, new Rook(bor, Color.White));
+            putNewPiece('e', 8, new Rook(bor, Color.White));
+            putNewPiece('d', 8, new King(bor, Color.White));
+        }
+
     }
 }

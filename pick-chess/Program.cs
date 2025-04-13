@@ -20,10 +20,8 @@ namespace pick_chess
 
 
                         Console.Clear();
-                        Screen.printBoard(match.bor);
-                        Console.WriteLine();
-                        Console.WriteLine("Turno: " + match.turn);
-                        Console.WriteLine("Waiting play: " + match.actualPlayer);
+                        Screen.printMatch(match);
+                   
 
                         Console.WriteLine();
                         Console.Write("Origin: ");
