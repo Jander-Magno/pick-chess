@@ -46,8 +46,8 @@ namespace pick_chess
                         Console.ReadLine();
                     }
                 }
-
-                Screen.printBoard(match.bor);
+                Console.Clear();
+                Screen.printMatch(match);
             }
             catch (BoardException e)
             {

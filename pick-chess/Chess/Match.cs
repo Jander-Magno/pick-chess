@@ -39,7 +39,7 @@ namespace pick_chess.Chess
             return capturedPiece;
         }
 
-        public void unMove(Position origin, Position destiny, Piece capturedPiece)
+        public void dontMove(Position origin, Position destiny, Piece capturedPiece)
         {
             Piece p = bor.removePiece(destiny);
             p.decrementQtyMoves();
@@ -57,8 +57,8 @@ namespace pick_chess.Chess
 
             if (inCheck(actualPlayer))
             {
-                unMove(origin, destiny, piece);
-                throw new BoardException("You can not checkmate yourself!");
+                dontMove(origin, destiny, piece);
+                throw new BoardException("You can not check yourself!");
             }
 
             if (inCheck(adversary(actualPlayer)))
@@ -70,8 +70,17 @@ namespace pick_chess.Chess
                 check = false;
             }
 
+            if (testCheckmate(adversary(actualPlayer)))
+            {
+                finished = true;
+            }
+            else
+            {
+                turn++;
+                changePlayer();
+            }
+
             turn++;
-            changePlayer();
         }
 
         public void validateOriginPosition(Position pos) 
@@ -166,6 +175,37 @@ namespace pick_chess.Chess
             return false;
         }
 
+        public bool testCheckmate(Color color)
+        {
+            if (!inCheck(color))
+            {
+                return false;
+            }
+            foreach (Piece x in inGamePieces(color))
+            {
+                bool[,] arr = x.possibleMoves();
+                for (int i = 0; i<bor.lines; i++)
+                {
+                    for (int j = 0; j<bor.columns; j++)
+                    {
+                        if (arr[i, j])
+                        {
+                            Position origin = x.position;
+                            Position destiny = new Position(i, j);
+                            Piece capturedPiece = executeMove(x.position, destiny);
+                            bool testCheck = inCheck(color);
+                            dontMove(origin, destiny, capturedPiece);
+                            if (!testCheck)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
         public HashSet<Piece> inGamePieces(Color color)
         {
             HashSet<Piece> aux = new HashSet<Piece>();
@@ -189,18 +229,11 @@ namespace pick_chess.Chess
         private void putPieces()
         {
             putNewPiece('c', 1, new Rook(bor, Color.White));
-            putNewPiece('c', 2, new Rook(bor, Color.White));
-            putNewPiece('d', 2, new Rook(bor, Color.White));
-            putNewPiece('e', 2, new Rook(bor, Color.White));
-            putNewPiece('e', 1, new Rook(bor, Color.White));
-            putNewPiece('d', 1, new King(bor, Color.White));
+            putNewPiece('d', 1, new Rook(bor, Color.White));
+            putNewPiece('d', 7, new King(bor, Color.White));
 
-            putNewPiece('c', 7, new Rook(bor, Color.Black));
-            putNewPiece('c', 8, new Rook(bor, Color.Black));
-            putNewPiece('d', 7, new Rook(bor, Color.Black));
-            putNewPiece('e', 7, new Rook(bor, Color.Black));
-            putNewPiece('e', 8, new Rook(bor, Color.Black));
-            putNewPiece('d', 8, new King(bor, Color.Black));
+            putNewPiece('a', 8, new Rook(bor, Color.Black));
+            putNewPiece('b', 8, new King(bor, Color.Black));
         }
 
     }

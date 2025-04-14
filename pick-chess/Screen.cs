@@ -14,10 +14,18 @@ namespace pick_chess.board
             printCapturedPieces(match);
             Console.WriteLine();
             Console.WriteLine("Turno: " + match.turn);
-            Console.WriteLine("Waiting play: " + match.actualPlayer);
-            if (match.check)
+            if (!match.finished)
+            {
+                Console.WriteLine("Waiting play: " + match.actualPlayer);
+                if (match.check)
+                {
+                    Console.WriteLine("Check!");
+                }
+            }
+            else
             {
                 Console.WriteLine("Checkmate!");
+                Console.WriteLine("Winner: " + match);
             }
         }
 
