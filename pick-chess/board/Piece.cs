@@ -14,9 +14,14 @@
             this.color = color;
             this.qtyMoves = 0;
         }
+
         public void incrementQtyMoves()
         {
             qtyMoves++;
+        }
+        public void decrementQtyMoves()
+        {
+            qtyMoves--;
         }
 
         public bool havePossibleMoves()

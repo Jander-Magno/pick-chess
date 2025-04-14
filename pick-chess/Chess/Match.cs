@@ -12,6 +12,7 @@ namespace pick_chess.Chess
         public bool finished { get; private set; }
         private HashSet<Piece> pieces;
         private HashSet<Piece> captures;
+        public bool check { get; private set; }
 
         public Match()
         {
@@ -19,12 +20,13 @@ namespace pick_chess.Chess
             turn = 1;
             actualPlayer = Color.White;
             finished = false;
+            check = false;
             pieces = new HashSet<Piece>();
             captures = new HashSet<Piece>();
             putPieces();
         }
 
-        public void executeMove(Position origin, Position destiny)
+        public Piece executeMove(Position origin, Position destiny)
         {
             Piece p = bor.removePiece(origin);
             p.incrementQtyMoves();
@@ -34,11 +36,40 @@ namespace pick_chess.Chess
             {
                 captures.Add(capturedPiece);
             }
+            return capturedPiece;
+        }
+
+        public void unMove(Position origin, Position destiny, Piece capturedPiece)
+        {
+            Piece p = bor.removePiece(destiny);
+            p.decrementQtyMoves();
+            if (capturedPiece != null)
+            {
+                bor.putPiece(capturedPiece, destiny);
+                captures.Remove(capturedPiece);
+            }
+            bor.putPiece(p, origin);
         }
 
         public void realizePlay(Position origin, Position destiny)
         {
-            executeMove(origin, destiny);
+            Piece piece = executeMove(origin, destiny);
+
+            if (inCheck(actualPlayer))
+            {
+                unMove(origin, destiny, piece);
+                throw new BoardException("You can not checkmate yourself!");
+            }
+
+            if (inCheck(adversary(actualPlayer)))
+            {
+                check = true;
+            }
+            else
+            {
+                check = false;
+            }
+
             turn++;
             changePlayer();
         }
@@ -92,6 +123,49 @@ namespace pick_chess.Chess
             return aux;
         }
 
+        private Color adversary(Color color)
+        {
+            if (color == Color.White)
+            {
+                return Color.Black;
+            }
+            else
+            {
+                return Color.White;
+            }
+        }
+
+        private Piece king(Color color)
+        {
+            foreach (Piece x in inGamePieces(color))
+            {
+                if (x is King)
+                {
+                    return x;
+                }
+            }
+            return null;
+        }
+
+        public bool inCheck(Color color)
+        {
+            Piece K = king(color);
+            if (K == null)
+            {
+                throw new BoardException("There is no king of color" + color + "on board!");
+            }
+
+            foreach (Piece x in inGamePieces(adversary(color)))
+            {
+                bool[,] arr = x.possibleMoves();
+                if (arr[K.position.line, K.position.column])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public HashSet<Piece> inGamePieces(Color color)
         {
             HashSet<Piece> aux = new HashSet<Piece>();
@@ -121,12 +195,12 @@ namespace pick_chess.Chess
             putNewPiece('e', 1, new Rook(bor, Color.White));
             putNewPiece('d', 1, new King(bor, Color.White));
 
-            putNewPiece('c', 7, new Rook(bor, Color.White));
-            putNewPiece('c', 8, new Rook(bor, Color.White));
-            putNewPiece('d', 7, new Rook(bor, Color.White));
-            putNewPiece('e', 7, new Rook(bor, Color.White));
-            putNewPiece('e', 8, new Rook(bor, Color.White));
-            putNewPiece('d', 8, new King(bor, Color.White));
+            putNewPiece('c', 7, new Rook(bor, Color.Black));
+            putNewPiece('c', 8, new Rook(bor, Color.Black));
+            putNewPiece('d', 7, new Rook(bor, Color.Black));
+            putNewPiece('e', 7, new Rook(bor, Color.Black));
+            putNewPiece('e', 8, new Rook(bor, Color.Black));
+            putNewPiece('d', 8, new King(bor, Color.Black));
         }
 
     }

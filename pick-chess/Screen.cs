@@ -15,6 +15,10 @@ namespace pick_chess.board
             Console.WriteLine();
             Console.WriteLine("Turno: " + match.turn);
             Console.WriteLine("Waiting play: " + match.actualPlayer);
+            if (match.check)
+            {
+                Console.WriteLine("Checkmate!");
+            }
         }
 
         public static void printCapturedPieces(Match match)
