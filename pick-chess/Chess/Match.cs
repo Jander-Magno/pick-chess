@@ -38,6 +38,26 @@ namespace pick_chess.Chess
                 captures.Add(capturedPiece);
             }
             return capturedPiece;
+
+            //#SpecialPlay Minor Castling 
+            if (p is King && destiny.column == origin.column + 2)
+            {
+                Position originR = new Position(origin.line, origin.column + 3);
+                Position destinyR = new Position(destiny.line, destiny.column + 1);
+                Piece R = bor.removePiece(destinyR);
+                R.decrementQtyMoves();
+                bor.putPiece(R, originR);
+            }
+
+            //#SpecialPlay Great Castling 
+            if (p is King && destiny.column == origin.column - 2)
+            {
+                Position originR = new Position(origin.line, origin.column + 4);
+                Position destinyR = new Position(destiny.line, destiny.column - 1);
+                Piece R = bor.removePiece(destinyR);
+                R.decrementQtyMoves();
+                bor.putPiece(R, destinyR);
+            }
         }
 
         public void dontMove(Position origin, Position destiny, Piece capturedPiece)
@@ -235,7 +255,7 @@ namespace pick_chess.Chess
             putNewPiece('g', 1, new Knight(bor, Color.White));
             putNewPiece('c', 1, new Bishop(bor, Color.White));
             putNewPiece('f', 1, new Bishop(bor, Color.White));
-            putNewPiece('e', 1, new King(bor, Color.White));
+            putNewPiece('e', 1, new King(bor, Color.White, this));
             putNewPiece('d', 1, new Queen(bor, Color.White));
             putNewPiece('a', 2, new Pawn(bor, Color.White));
             putNewPiece('h', 2, new Pawn(bor, Color.White));
@@ -252,7 +272,7 @@ namespace pick_chess.Chess
             putNewPiece('g', 8, new Knight(bor, Color.Black));
             putNewPiece('c', 8, new Bishop(bor, Color.Black));
             putNewPiece('f', 8, new Bishop(bor, Color.Black));
-            putNewPiece('e', 8, new King(bor, Color.Black));
+            putNewPiece('e', 8, new King(bor, Color.Black, this));
             putNewPiece('d', 8, new Queen(bor, Color.Black));;
             putNewPiece('a', 7, new Pawn(bor, Color.Black));
             putNewPiece('h', 7, new Pawn(bor, Color.Black));
@@ -262,8 +282,6 @@ namespace pick_chess.Chess
             putNewPiece('f', 7, new Pawn(bor, Color.Black));
             putNewPiece('e', 7, new Pawn(bor, Color.Black));
             putNewPiece('d', 7, new Pawn(bor, Color.Black));
-
         }
-
     }
 }
