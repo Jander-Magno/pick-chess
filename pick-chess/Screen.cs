@@ -13,7 +13,7 @@ namespace pick_chess.board
             Console.WriteLine();
             printCapturedPieces(match);
             Console.WriteLine();
-            Console.WriteLine("Turno: " + match.turn);
+            Console.WriteLine("Turn: " + match.turn);
             if (!match.finished)
             {
                 Console.WriteLine("Waiting play: " + match.actualPlayer);
