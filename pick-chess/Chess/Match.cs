@@ -101,7 +101,7 @@ namespace pick_chess.Chess
 
         public void validateDestinyPosition(Position origin, Position destiny)
         {
-            if (!bor.piece(origin).canMoveTo(destiny))
+            if (!bor.piece(origin).possibleMove(destiny))
             {
                 throw new BoardException("Invalid destiny position!");
             }
