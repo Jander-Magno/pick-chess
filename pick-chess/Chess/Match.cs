@@ -14,6 +14,7 @@ namespace pick_chess.Chess
         private HashSet<Piece> pieces;
         private HashSet<Piece> captures;
         public bool check { get; private set; }
+        public Piece vulnerableEnPassant { get; private set; }
 
         public Match()
         {
@@ -22,6 +23,7 @@ namespace pick_chess.Chess
             actualPlayer = Color.White;
             finished = false;
             check = false;
+            vulnerableEnPassant = null;
             pieces = new HashSet<Piece>();
             captures = new HashSet<Piece>();
             putPieces();
@@ -101,7 +103,17 @@ namespace pick_chess.Chess
                 changePlayer();
             }
 
-            turn++;
+            Piece p = bor.piece(destiny);
+
+            //#SpecialPlay En Passant
+            if (p is Pawn && (destiny.line == origin.line - 2 || destiny.line == origin.line + 2))
+            {
+                vulnerableEnPassant = p;
+            }
+            else
+            {
+                vulnerableEnPassant = null;
+            }
         }
 
         public void validateOriginPosition(Position pos) 

@@ -1,13 +1,16 @@
 ﻿using System;
 using pick_chess.board;
+using pick_chess.Chess;
 
 namespace pick_chess.chess
 {
     internal class Pawn : Piece
     {
-        public Pawn(Board bor, Color color) : base(bor, color)
-        {
 
+        private Match match;
+        public Pawn(Board bor, Color color, Match match) : base(bor, color)
+        {
+            this.match = match;
         }
 
         public override string ToString()
@@ -56,6 +59,38 @@ namespace pick_chess.chess
                 if (bor.positionValid(pos) && existEnemy(pos))
                 {
                     arr[pos.line, pos.column] = true;
+                }
+
+                //#SpecialPlay En Passant
+                if (position.line == 3)
+                {
+                    Position left = new Position(position.line, position.column - 1);
+                    if (bor.positionValid(left) && existEnemy(left) && bor.piece(left) == match.vulnerableEnPassant)
+                    {
+                        arr[left.line, left.column] = true;
+                    }
+
+                    Position right = new Position(position.line, position.column + 1);
+                    if (bor.positionValid(right) && existEnemy(right) && bor.piece(right) == match.vulnerableEnPassant)
+                    {
+                        arr[right.line, right.column] = true;
+                    }
+                }
+
+                //#SpecialPlay En Passant
+                if (position.line == 4)
+                {
+                    Position left = new Position(position.line, position.column - 1);
+                    if (bor.positionValid(left) && existEnemy(left) && bor.piece(left) == match.vulnerableEnPassant)
+                    {
+                        arr[left.line, left.column] = true;
+                    }
+
+                    Position right = new Position(position.line, position.column + 1);
+                    if (bor.positionValid(right) && existEnemy(right) && bor.piece(right) == match.vulnerableEnPassant)
+                    {
+                        arr[right.line, right.column] = true;
+                    }
                 }
             }
             else
